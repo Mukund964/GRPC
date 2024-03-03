@@ -12,7 +12,7 @@ var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 var todoService = protoDescriptor.TodoService;
 const Routeserver = new grpc.Server();
 
-var Todos = [
+var todos = [
     {
         id: 1,
         title: 'Todo 1',
@@ -26,17 +26,18 @@ var Todos = [
 ];
 Routeserver.addService(todoService.service,{
     listTodos : (call,callback) => {
-        callback(null,Todos);
+        console.log(call);
+        callback(null,{todos});
     },
     createTodo : (call,callback) => {
         let incomingRequest = call.request;
-        Todos.push(incomingRequest);
-        callback(null,incomingRequest);
+        todos.push(incomingRequest);
+        callback(null,{incomingRequest});
     },
     getTodo : (call,callback) => {
         let id = call.request.id;
-        let todo = Todos.find(todo => todo.id === id);
-        callback(null,todo);
+        let todo = todos.find(todo => todo.id === id);
+        callback(null,{todo});
     }
 });
 
